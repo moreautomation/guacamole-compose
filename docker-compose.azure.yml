@@ -1,0 +1,39 @@
+version: '3.3'
+
+services:
+  db:
+    hostname: db
+    image: mysql:5.5
+    restart: always
+    volumes:
+      - data:/var/lib/mysql
+      - ${WEBAPP_STORAGE_HOME}/site/schema/001-create-schema.sql:/docker-entrypoint-initdb.d/001-create-schema.sql
+      - ${WEBAPP_STORAGE_HOME}/site/schema/002-create-admin-user.sql:/docker-entrypoint-initdb.d/002-create-admin-user.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: guacamole_db
+      MYSQL_USER: guacamole_db
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  guacd:
+    hostname: guacd
+    image: guacamole/guacd
+    restart: always
+
+  guacamole:
+    image: guacamole/guacamole
+    restart: always
+    ports:
+      - 80:8080
+    links:
+      - guacd
+      - db
+    environment:
+      GUACD_HOSTNAME: guacd
+      MYSQL_HOSTNAME: db
+      MYSQL_DATABASE: guacamole_db
+      MYSQL_USER: guacamole_db
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+volumes:
+  data:

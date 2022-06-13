@@ -1,1 +1,1 @@
-# guacamole-compose
+# Docker Compose for Guacamole
