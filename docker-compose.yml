@@ -7,8 +7,8 @@ services:
     restart: always
     volumes:
       - data:/var/lib/mysql
-      - schema/001-create-schema.sql:/docker-entrypoint-initdb.d/001-create-schema.sql
-      - schema/002-create-admin-user.sql:/docker-entrypoint-initdb.d/002-create-admin-user.sql
+      - ./schema/001-create-schema.sql:/docker-entrypoint-initdb.d/001-create-schema.sql
+      - ./schema/002-create-admin-user.sql:/docker-entrypoint-initdb.d/002-create-admin-user.sql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: guacamole_db
